@@ -32,10 +32,6 @@ app.use("/api/auth", authRouter);
 app.use("/api/Reminders", remindersRouter);
 app.use("/api/node", nodeRouter);
 app.use('/api/speachtotext', speachToTextRouter);
-//app.use('/api/food',require('./routes/food'))
-//app.use('/api/catalogeLists',require('./routes/catalogeLists'))
-//app.use('/api/cart',require('./routes/cart'))
-//app.use('/api/order',require('./routes/orders'))
 
 export function getSocketInstanse(){
   return io
