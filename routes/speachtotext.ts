@@ -8,8 +8,7 @@ const router = express.Router()
 
 
 // Route:1 auth a user
-router.post('/NodeSend', async (req: express.Request, res: express.Response) => {
-  // Validate User Here
+router.post('/toText', async (req: express.Request, res: express.Response) => {
   try {
   } catch (error) {
     console.log(error)
@@ -20,4 +19,3 @@ router.post('/NodeSend', async (req: express.Request, res: express.Response) => 
 
 
 export default router;
-

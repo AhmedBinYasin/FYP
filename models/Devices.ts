@@ -1,17 +1,17 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 
-const userSchema = new Schema({
-  UserName: {
+const Devices = new Schema({
+  Node_ID: {
     type: String,
     required: true,
     unique: true,
   },
-  NickName: {
+  Location: {
     type: String,
   },
-  Password: {
-    type: String,
+  Connection: {
+    type: Boolean,
     required: true,
   },
   TimeLastLogined: {
@@ -20,5 +20,5 @@ const userSchema = new Schema({
   },
 })
 
-const User = mongoose.model('user', userSchema)
-export default User
+const Nodes = mongoose.model('devices', Devices)
+export default Nodes

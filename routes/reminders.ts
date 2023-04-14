@@ -120,4 +120,4 @@ router.post('/GetReminderHistoryLength', async (req: express.Request, res: expre
 
 
 
-module.exports = router
+export default router;
