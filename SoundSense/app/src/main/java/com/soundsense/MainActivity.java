@@ -3,9 +3,11 @@ package com.soundsense;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mywebView=(WebView) findViewById(R.id.webview);
-        mywebView.setWebViewClient(new WebViewClient());
+        mywebView=findViewById(R.id.webview);
+
         mywebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
@@ -30,9 +32,31 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        mywebView.setWebViewClient(new WebViewClient());
         mywebView.loadUrl("http://192.168.72.101:3000");
-        WebSettings webSettings=mywebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        mywebView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void onConnect() {
+                System.out.println("abc");
+            }
+
+            @JavascriptInterface
+            public void onDisconnect() {
+                // Handle Socket.io disconnect event
+            }
+
+            @JavascriptInterface
+            public void onMessage(String message) {
+                // Handle Socket.io message event
+            }
+        }, "socket");
+        mywebView.getSettings().setJavaScriptEnabled(true);
+        mywebView.getSettings().setAllowContentAccess(true);
+        mywebView.getSettings().setDomStorageEnabled(true);
+        mywebView.getSettings().setDatabaseEnabled(true);
+        mywebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        mywebView.getSettings().setAllowFileAccess(true);
+
     }
     public class mywebClient extends WebViewClient {
         @Override
