@@ -2,6 +2,7 @@ import express from 'express';
 import Alarms from '../models/Dates';
 import History from '../models/RemindersHistory';
 import User from '../models/User';
+import AdminLogs from '../models/AdminLogs';
 
 const router = express.Router()
 
@@ -18,6 +19,7 @@ router.post('/AddNewReminder', async (req: express.Request, res: express.Respons
     return res.json({ status: true })
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder add'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -37,6 +39,18 @@ router.post('/UpdateReminder', async (req: express.Request, res: express.Respons
     }
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder Update'})
+    return res.status(500).json({ error: error, status: false })
+  }
+},
+)
+router.post('/DeleteReminder', async (req: express.Request, res: express.Response) => {
+  try {
+    await Alarms.deleteOne({ UserName: req.body.UserName, Date: req.body.previous[0], Message: req.body.previous[1], })
+    return res.json({ status: true })
+  } catch (error) {
+    console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder delete'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -52,6 +66,7 @@ router.post('/ReAddReminder', async (req: express.Request, res: express.Response
     return res.json({ status: true })
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder add'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -63,6 +78,7 @@ router.post('/GetReminder', async (req: express.Request, res: express.Response) 
     return res.json({ status: true, List: List })
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder get'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -80,6 +96,7 @@ router.post('/EnableReminder', async (req: express.Request, res: express.Respons
     }
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder add'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -91,6 +108,7 @@ router.post('/GetReminderHistory', async (req: express.Request, res: express.Res
     return res.json({ status: true, List: List })
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'History add'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -102,6 +120,7 @@ router.post('/GetReminderLength', async (req: express.Request, res: express.Resp
     return res.json({ status: true, length: List.length })
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder get'})
     return res.status(500).json({ error: error, status: false })
   }
 },
@@ -113,6 +132,7 @@ router.post('/GetReminderHistoryLength', async (req: express.Request, res: expre
     return res.json({ status: true, length: List.length })
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder get'})
     return res.status(500).json({ error: error, status: false })
   }
 },

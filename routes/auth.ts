@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/User';
+import AdminLogs from '../models/AdminLogs';
 
 const router = express.Router()
 
@@ -9,12 +10,15 @@ router.post('/CreateUser', async (req, res) => {
     let user = await User.findOne({ UserName: req.body.UserName })
     if (user == null) {
       User.create({ UserName: req.body.UserName, Password: req.body.Password, })
+      AdminLogs.create({Type:'authentication',Message:''+req.body.UserName+' successfully created.'})
+      AdminLogs.create({Type:'authentication',Message:''+req.body.UserName+' logged in successfully'})
       return res.json({ UserName: req.body.UserName })
     }
     else { return res.status(400).json({ Message: 'User already exist' }) }
   }
   catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Create User'})
     return res.status(500).json({ error: 'server error' })
   }
 
@@ -30,9 +34,11 @@ router.post('/Login', async (req: express.Request, res: express.Response) => {
     user.TimeLastLogined = new Date()
     user.save()
     const Data = { UserName: user.UserName }
+    AdminLogs.create({Type:'authentication',Message:''+req.body.UserName+' logged in successfully'})
     return res.json(Data)
   } catch (error) {
     console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Login'})
     return res.status(500).json({ error: 'server error' })
   }
 },

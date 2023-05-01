@@ -10,6 +10,8 @@ import authRouter from "./routes/auth";
 import remindersRouter from "./routes/reminders";
 import nodeRouter from "./routes/node";
 import speachToTextRouter from "./routes/speachtotext";
+import NodeRouter from "./routes/devices";
+import { nodeConfig } from "./sockets/Devices";
 
 connectToMongo()
 
@@ -32,6 +34,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/Reminders", remindersRouter);
 app.use("/api/node", nodeRouter);
 app.use('/api/speachtotext', speachToTextRouter);
+app.use('/api/Node', NodeRouter);
 
 export function getSocketInstanse(){
   return io
@@ -40,6 +43,5 @@ export function getSocketInstanse(){
 http.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
-
+nodeConfig(io)
 setInterval(() => { AlarmLoop('Ahmed', io) }, 1000);
-
