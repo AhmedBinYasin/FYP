@@ -12,6 +12,7 @@ const HistorySchema = new Schema({
   },
   Message: {
     type: String,
+    default:''
   },
 })
 

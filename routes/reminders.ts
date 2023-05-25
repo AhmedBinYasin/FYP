@@ -138,6 +138,17 @@ router.post('/GetReminderHistoryLength', async (req: express.Request, res: expre
 },
 )
 
+router.post('/GetReminderHistoryLength', async (req: express.Request, res: express.Response) => {
+  try {
+    let List = await History.find({ UserName: req.body.UserName, })
+    return res.json({ status: true, length: List.length })
+  } catch (error) {
+    console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder get'})
+    return res.status(500).json({ error: error, status: false })
+  }
+},
+)
 
 
 export default router;

@@ -14,7 +14,6 @@ import NodeRouter from "./routes/devices";
 import { nodeConfig } from "./sockets/Devices";
 
 connectToMongo()
-
 const app = express();
 config();
 const port = process.env.PORT || 5000;

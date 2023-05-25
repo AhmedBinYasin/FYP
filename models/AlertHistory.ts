@@ -16,9 +16,11 @@ const AlertHistorySchema = new Schema({
     },
     DeviceID: {
         type: String,
+        default:''
     },
     Location: {
         type: String,
+        default:''
     }
 })
 

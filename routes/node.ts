@@ -12,7 +12,7 @@ const router = express.Router()
 // Route:1 auth a user
 router.post('/GetHistory', async (req: express.Request, res: express.Response) => {
   try {
-    let List=await AlertHistory.find() as Array<{OutputType: string; Date: Date; Content: string; DeviceID?: string | undefined; Location?: string | undefined;}>
+    let List=await AlertHistory.find().limit(5).skip((req.body.page - 1) * 10) as Array<{OutputType: string; Date: Date; Content: string; DeviceID: string; Location: string;}>
     return res.json({ status: true, List: List })
   } catch (error) {
     console.log(error)

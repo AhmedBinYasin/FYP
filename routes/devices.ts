@@ -21,7 +21,31 @@ router.post('/GetConnectedNodes', async (req: express.Request, res: express.Resp
 
 router.post('/GetHistory', async (req: express.Request, res: express.Response) => {
   try {
-    let List = await AlertHistory.find() as Array<{ OutputType: string; Date: Date; Content: string; DeviceID?: string | undefined; Location?: string | undefined; }>
+    let List=await AlertHistory.find().limit(7).skip((req.body.page - 1) * 7) as Array<{OutputType: string; Date: Date; Content: string; DeviceID: string; Location: string;}>
+    return res.json({ status: true, List: List })
+  } catch (error) {
+    console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'AlertHistory get'})
+    return res.status(500).json({ error: 'server error' })
+  }
+},
+)
+router.post('/GetHistoryLength', async (req: express.Request, res: express.Response) => {
+  try {
+    let List = await AlertHistory.find()
+    console.log(List.length)
+    return res.json({ status: true, length: List.length })
+  } catch (error) {
+    console.log(error)
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder get'})
+    return res.status(500).json({ error: error, status: false })
+  }
+},
+)
+
+router.post('/GetAdminLogs', async (req: express.Request, res: express.Response) => {
+  try {
+    let List = await AdminLogs.find().limit(7).skip((req.body.page - 1) * 7) as Array<{ Date: Date; Type: string; Message: string; Address: string;}>
     return res.json({ status: true, List: List })
   } catch (error) {
     console.log(error)
@@ -30,15 +54,14 @@ router.post('/GetHistory', async (req: express.Request, res: express.Response) =
   }
 },
 )
-
-router.post('/GetAdminLogs', async (req: express.Request, res: express.Response) => {
+router.post('/GetAdminLogsLength', async (req: express.Request, res: express.Response) => {
   try {
-    let List = await AdminLogs.find() as Array<{ Date: Date; Type: string; Message?: string | undefined; Address?: string | undefined;}>
-    return res.json({ status: true, List: List })
+    let List = await AdminLogs.find()
+    return res.json({ status: true, length: List.length })
   } catch (error) {
     console.log(error)
-    AdminLogs.create({ Type: 'Error', Message: error, Address: 'AlertHistory get' })
-    return res.status(500).json({ error: 'server error' })
+    AdminLogs.create({Type:'Error',Message:error,Address:'Reminder get'})
+    return res.status(500).json({ error: error, status: false })
   }
 },
 )
